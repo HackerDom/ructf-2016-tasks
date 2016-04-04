@@ -74,7 +74,7 @@ def parse_args():
 def main(args):
     params = parse_args()
 
-    print(create_task(args[0], 20))
+    print(create_task(args[0], 100))
 
 
 if __name__ == '__main__':
