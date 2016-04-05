@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
 
-import abc
-import hashlib
 import io
 import itertools
 import os
@@ -9,8 +7,9 @@ import os.path
 import random
 import sys
 import tarfile
-from functools import wraps
 from PIL import Image, ImageDraw
+
+from taskutils import BaseTask, md5
 
 
 FLAG_PREFIX = 'RUCTF'
@@ -71,63 +70,6 @@ def create_task(filename, parts):
     return flag
 
 
-def md5(data):
-    h = hashlib.md5()
-    h.update(repr(data).encode())
-    return h.hexdigest()
-
-
-class BaseTask(metaclass=abc.ABCMeta):
-    _CMD_ATTR = '__command_name'
-    NAME = None
-    CATEGORY = None
-    SCORE = None
-
-    @staticmethod
-    def cmd(name):
-        def handler(func):
-            @wraps(func)
-            def wrapper(*args):
-                return func(*args)
-
-            setattr(wrapper, BaseTask._CMD_ATTR, name)
-            return wrapper
-        return handler
-
-    def __init__(self):
-        cls = type(self)
-
-        @BaseTask.cmd("id")
-        def cmd_id():
-            print("{}:{}".format(cls.CATEGORY, cls.SCORE))
-
-        @BaseTask.cmd("series")
-        def cmd_series():
-            print(cls.CATEGORY)
-
-        @BaseTask.cmd("name")
-        def cmd_name():
-            print(cls.NAME)
-
-        setattr(self, 'cmd_id', cmd_id)
-        setattr(self, 'cmd_series', cmd_series)
-        setattr(self, 'cmd_name', cmd_name)
-
-    def run(self, command=None, *args):
-        for fn in dir(self):
-            f = getattr(self, fn)
-            if hasattr(f, BaseTask._CMD_ATTR):
-                if getattr(f, BaseTask._CMD_ATTR) == command:
-                    return f(*args)
-
-        return 1
-
-    @staticmethod
-    def create(**kwargs):
-        name = "Task_{}".format(kwargs['NAME'])
-        return type(name, (BaseTask,), kwargs)
-
-
 class Task(BaseTask.create(
     NAME='splitting', CATEGORY='ppc', SCORE=100,
     HTML_EN="Find the flag", HTML_RU="Найдите флаг", DB_FILE='flags.db')):
@@ -140,10 +82,8 @@ class Task(BaseTask.create(
         os.makedirs(os.path.join(dump_dir, task_dir), exist_ok=True)
 
         flag = create_task(os.path.join(dump_dir, fn), Task.PARTS)
-        quid = md5(random.random())
-
-        with open(os.path.join(dump_dir, Task.DB_FILE), 'a') as f:
-            print("{}\t{}".format(quid, flag), file=f)
+        quid = BaseTask.store_flag(
+            os.path.join(dump_dir, Task.DB_FILE), flag)
 
         print("ID:{}".format(quid))
         print("html[en]:{}".format(Task.HTML_EN))
@@ -154,18 +94,13 @@ class Task(BaseTask.create(
     def cmd_user(self, dump_dir, quid):
         answer = sys.stdin.readline().strip()
 
-        with open(os.path.join(dump_dir, Task.DB_FILE)) as f:
-            for line in f:
-                if not line.startswith(quid):
-                    continue
+        if BaseTask.check_flag(
+            os.path.join(dump_dir, Task.DB_FILE), quid, answer):
+            print("Correct")
+            return 0
 
-                (_, true_answer) = line.strip().split('\t')
-                if answer == true_answer:
-                    print("Correct.")
-                    return 0
-
-                print("Wrong answer.")
-                return 1
+        print("Wrong answer")
+        return 1
 
 
 def main(args):
