@@ -4,8 +4,8 @@ import argparse
 import io
 import itertools
 import sys
+import tarfile
 from collections import namedtuple
-from os.path import basename, splitext
 
 
 Graph = namedtuple('Graph', ('graph', 'edges'))
@@ -69,7 +69,7 @@ def find_all_chains(graph, start):
     while queue:
         (vertex, path) = queue.pop(0)
         if len(path) == len(graph):
-            yield path
+            yield path[:]
 
         visited = set(path)
 
@@ -83,7 +83,7 @@ def restore_file(data, graph, chain):
     for common in itertools.product(*(
         graph[chain[i], chain[i + 1]] for i in range(len(chain) - 1))):
         stream = io.BytesIO()
-        for (part, offset) in zip(chain, [0] + list(common)):
+        for (part, offset) in zip(chain, itertools.chain([0], common)):
             stream.write(data[part][offset:])
         yield stream.getvalue()
 
@@ -95,8 +95,7 @@ def parse_args():
                         help='start vertex')
     parser.add_argument('-o', '--output', type=str, metavar='PREFIX',
                         default='result_', help='prefix of output files')
-    parser.add_argument('files', nargs='+', type=str, metavar='FILES',
-                        help='input files')
+    parser.add_argument('file', type=str, metavar='FILE', help='input file')
 
     return parser.parse_args()
 
@@ -105,9 +104,10 @@ def main(args):
     params = parse_args()
 
     data = {}
-    for fn in params.files:
-        with open(fn, 'rb') as f:
-            data[splitext(basename(fn))[0]] = f.read()
+    with tarfile.open(params.file) as tar:
+        for entry in tar:
+            with tar.extractfile(entry) as f:
+                data[entry.name] = f.read()
 
     start = params.start or find_start(data)
     if not start:
