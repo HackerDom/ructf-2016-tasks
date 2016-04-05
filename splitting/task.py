@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import abc
 import hashlib
 import io
 import itertools
@@ -76,62 +77,63 @@ def md5(data):
     return h.hexdigest()
 
 
-CMD_ATTR = '__command_name'
+class BaseTask(metaclass=abc.ABCMeta):
+    _CMD_ATTR = '__command_name'
+    NAME = None
+    CATEGORY = None
+    SCORE = None
 
+    @staticmethod
+    def cmd(name):
+        def handler(func):
+            @wraps(func)
+            def wrapper(*args):
+                return func(*args)
 
-def cmd(name):
-    def handler(func):
-        @wraps(func)
-        def wrapper(*args):
-            return func(*args)
+            setattr(wrapper, BaseTask._CMD_ATTR, name)
+            return wrapper
+        return handler
 
-        setattr(wrapper, CMD_ATTR, name)
-        return wrapper
-    return handler
+    def __init__(self):
+        cls = type(self)
 
+        @BaseTask.cmd("id")
+        def cmd_id():
+            print("{}:{}".format(cls.CATEGORY, cls.SCORE))
 
-def base_task(**kwargs):
-    name = "Task_{}".format(kwargs['NAME'])
+        @BaseTask.cmd("series")
+        def cmd_series():
+            print(cls.CATEGORY)
 
-    cls = type(name, (), kwargs)
+        @BaseTask.cmd("name")
+        def cmd_name():
+            print(cls.NAME)
 
-    @cmd("id")
-    def cmd_id(self):
-        print("{}:{}".format(cls.CATEGORY, cls.SCORE))
-
-    @cmd("series")
-    def cmd_series(self):
-        print(cls.CATEGORY)
-
-    @cmd("name")
-    def cmd_name(self):
-        print(cls.NAME)
+        setattr(self, 'cmd_id', cmd_id)
+        setattr(self, 'cmd_series', cmd_series)
+        setattr(self, 'cmd_name', cmd_name)
 
     def run(self, command=None, *args):
         for fn in dir(self):
             f = getattr(self, fn)
-            if hasattr(f, CMD_ATTR) and getattr(f, CMD_ATTR) == command:
-                return f(*args)
+            if hasattr(f, BaseTask._CMD_ATTR):
+                if getattr(f, BaseTask._CMD_ATTR) == command:
+                    return f(*args)
 
         return 1
 
-    setattr(cls, 'cmd_id', cmd_id)
-    setattr(cls, 'cmd_series', cmd_series)
-    setattr(cls, 'cmd_name', cmd_name)
-    setattr(cls, 'run', run)
-
-    return cls
+    @staticmethod
+    def create(**kwargs):
+        name = "Task_{}".format(kwargs['NAME'])
+        return type(name, (BaseTask,), kwargs)
 
 
-class Task(base_task(NAME='splitting',
-                     CATEGORY='ppc',
-                     SCORE=100,
-                     HTML_EN="Find the flag",
-                     HTML_RU="Найдите флаг",
-                     DB_FILE='flags.db')):
+class Task(BaseTask.create(
+    NAME='splitting', CATEGORY='ppc', SCORE=100,
+    HTML_EN="Find the flag", HTML_RU="Найдите флаг", DB_FILE='flags.db')):
     PARTS = 50
 
-    @cmd("create")
+    @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id):
         task_dir = md5(random.random())
         fn = os.path.join(task_dir, "data.tar")
@@ -148,7 +150,7 @@ class Task(base_task(NAME='splitting',
         print("html[ru]:{}".format(Task.HTML_RU))
         print("file:{}".format(fn))
 
-    @cmd("user")
+    @BaseTask.cmd("user")
     def cmd_user(self, dump_dir, quid):
         answer = sys.stdin.readline().strip()
 
@@ -168,8 +170,7 @@ class Task(base_task(NAME='splitting',
 
 def main(args):
     sys.stdout = open(1, 'w', encoding='utf-8', closefd=True)
-    task = Task()
-    return task.run(*args)
+    return Task().run(*args)
 
 
 if __name__ == '__main__':
