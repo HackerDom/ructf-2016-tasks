@@ -77,30 +77,14 @@ class Task(BaseTask.create(
 
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id):
-        task_dir = md5(random.random())
-        fn = os.path.join(task_dir, "data.tar")
-        os.makedirs(os.path.join(dump_dir, task_dir), exist_ok=True)
-
-        flag = create_task(os.path.join(dump_dir, fn), Task.PARTS)
-        quid = BaseTask.store_flag(
-            os.path.join(dump_dir, Task.DB_FILE), flag)
-
-        print("ID:{}".format(quid))
-        print("html[en]:{}".format(Task.HTML_EN))
-        print("html[ru]:{}".format(Task.HTML_RU))
-        print("file:{}".format(fn))
+        (fn, quid) = Task.prepare_task(dump_dir, 'data.tar',
+                                       create_task, Task.PARTS)
+        Task.print_task_info(quid, fn)
 
     @BaseTask.cmd("user")
     def cmd_user(self, dump_dir, quid):
-        answer = sys.stdin.readline().strip()
-
-        if BaseTask.check_flag(
-            os.path.join(dump_dir, Task.DB_FILE), quid, answer):
-            print("Correct")
-            return 0
-
-        print("Wrong answer")
-        return 1
+        code = Task.check_task(dump_dir, quid)
+        return (0 if code else 1)
 
 
 def main(args):
