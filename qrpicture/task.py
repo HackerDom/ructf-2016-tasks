@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+
+import os
+import os.path
+import random
+import struct
+import sys
+import qrcode
+from qrcode.image.pil import PilImage
+
+from taskutils import BaseTask, md5
+
+
+FLAG_PREFIX = 'RUCTF'
+FLAG_ABC = '0123456789_ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+
+
+class BitStreamImage(qrcode.image.base.BaseImage):
+    def new_image(self, **kwargs):
+        self.canvas = [[False]*self.width for _ in range(self.width)]
+
+    def drawrect(self, row, col):
+        self.canvas[row][col] = True
+
+    def __str__(self):
+        return ''.join(''.join(str(int(c)) for c in row)
+                       for row in self.canvas)
+
+
+def unbinarize(s):
+    if set(s) != set('01'):
+        raise ValueError('only binary')
+
+    data = []
+    while s:
+        data.append(int(s[-8:], 2))
+        s = s[:-8]
+
+    data.reverse()
+    return struct.pack('B'*len(data), *data)
+
+
+def data_to_qr(data, iters=1):
+    for i in range(iters):
+        qr = qrcode.QRCode(border=0, box_size=2, image_factory=BitStreamImage)
+        qr.add_data(data)
+        if i < iters - 1:
+            data = unbinarize(str(qr.make_image()))
+
+    return (data, qr.make_image(image_factory=PilImage))
+
+
+def create_task(filename):
+    flag = FLAG_PREFIX + ''.join(random.choice(FLAG_ABC) for _ in range(16))
+    (data, image) = data_to_qr(flag, 3)
+    image.save(filename, 'PNG')
+    return flag
+
+
+class Task(BaseTask.create(
+    NAME='qrcode', CATEGORY='ppc', SCORE=50, DB_FILE='flags.db',
+    HTML_EN='Find the flag',
+    HTML_RU='Найдите флаг')):
+
+    @BaseTask.cmd("create")
+    def cmd_create(self, dump_dir, team_id):
+        (fn, quid) = Task.prepare_task(dump_dir, 'task.png', create_task)
+        Task.print_task_info(quid, fn)
+
+    @BaseTask.cmd("user")
+    def cmd_user(self, dump_dir, quid):
+        code = Task.check_task(dump_dir, quid)
+        return (0 if code else 1)
+
+
+def main(args):
+    sys.stdout = open(1, 'w', encoding='utf-8', closefd=True)
+    return Task().run(*args)
+
+
+if __name__ == '__main__':
+    sys.exit(main(sys.argv[1:]))
