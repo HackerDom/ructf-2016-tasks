@@ -3,7 +3,7 @@ import sys
 import binascii
 import hashlib
 
-#pictures on kotwizkiy.ru/ructf/ructf.zip
+# pictures on kotwizkiy.ru/ructf/ructf.zip
 
 string = sys.argv[1]
 hash_object = hashlib.md5(string.encode('utf-8'))
@@ -11,7 +11,7 @@ string = '0' + \
     bin(int(binascii.hexlify(
         bytes('RUCTF_' + hash_object.hexdigest()[:7], 'utf-8')), 16))[2:]
 
-string.rjust(105,'0')
+string = string.rjust(105, '0')
 
 for i in range(1, 105):
     img = Image.open('image-' + str(i) + '.png')
