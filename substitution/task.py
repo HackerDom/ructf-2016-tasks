@@ -1,0 +1,87 @@
+#!/usr/bin/python3
+
+ERR_OK = 0
+ERR_UNKNOWN_METHOD = 1
+ERR_CHECKER_ERROR = 2
+ERR_WRONG_ANSWER = 3
+
+TASK_ID = "sub"
+TASK_SCORE = 1
+TASK_NAME = "Substitution"
+
+TASK_HTML_EN_PATTERN = "You are given an encryption algorithm that " + \
+					   "takes a binary string of length <i>{msg_len}</i>, " + \
+					   "then calculates a number of ones modulo <i>{m}</i>" + \
+					   ", let's call it <i>n<\i>, concatenates " + \
+					   "original message with <i>{check_len} - n</i> zeroes " + \
+					   "and <i>n</i> ones and then xors it with a key of " + \
+					   "lenth <i>{crypt_len}</i>, that is chosen randomly beforehead. " + \
+					   "What is the probability of successful bit-flipping attack? " + \
+					   "I.e. what is the maximum probability of obtaining a new " + \
+					   "cryptogram from the intercepted that can be successfully decrypted?"
+TASK_HTML_RU_PATTERN = "Вам дан алгоритм шифрования, который берет бинарную строку длины " + \
+					   "<i>{msg_len}</i>, вычисляет количество единиц по модулю <i>{m}</i>, " + \
+					   "обозначим это число как <i>n<\i>, затем конкатинирует исходное сообщение " + \
+					   " с <i>{check_len} - n</i> нулями и <i>n</i> единицами и складывает " + \
+					   "побитово с ключом длины <i>{crypt_len}</i>, выбраным случайно заранее. " + \
+					   "Какова вероятность успешной подмены этого шифра? Т.е. какова максимальная " + \
+					   "вероятность получить из перехваченой шифрограммы новую, " + \
+					   "которая может быть успешно расшифрована?"
+
+VARIANTS_FILE_NAME = "variants.txt"
+
+EPSILON = 1e-6
+
+import hashlib
+import sys
+
+def create_task(dump_dir, user_id):
+	user_number = int(hashlib.md5(user_id.encode("utf-8")).hexdigest(), 16)
+	with open(VARIANTS_FILE_NAME, "rt") as f:
+		variants = f.readlines()
+		variant_idx = user_number % len(variants)
+		variant = variants[variant_idx].split()
+		k, m, _ = variant
+		k, m = int(k), int(m)
+
+	pattern_dict = { "msg_len": k - m + 1, "m": m, "check_len": m - 1, "crypt_len": k }
+
+	task = \
+		"ID: " + str(variant_idx) + "\n" + \
+		"html[en]: " + TASK_HTML_EN_PATTERN.format(**pattern_dict) + "\n" + \
+		"html[ru]: " + TASK_HTML_RU_PATTERN.format(**pattern_dict) + "\n"
+	sys.stdout.write(task);
+
+def check_answer(dump_dir, variant_idx, answer):
+	with open(VARIANTS_FILE_NAME, "rt") as f:
+		variants = f.readlines()
+		(_, _, jury_answer) = variants[int(variant_idx)].split()
+		jury_answer = float(jury_answer)
+
+	try:
+		answer = float(answer)
+		if abs(answer - jury_answer) > EPSILON:
+			sys.stderr.write("Wrong answer, expected {0} got {1}\n".format(jury_answer, answer))
+			sys.exit(ERR_WRONG_ANSWER)
+		sys.exit(ERR_OK)
+	except Exception as e:
+		sys.stderr.write("Exception during checking answer: {0}\n".format(e))
+		sys.exit(ERR_WRONG_ANSWER)
+
+
+if __name__ == "__main__":
+	method = sys.argv[1]
+
+	if method == "id":
+		sys.stdout.write("{0}:{1}\n".format(TASK_ID, TASK_SCORE))
+	elif method == "series":
+		sys.stdout.write("{0}\n".format(TASK_ID))
+	elif method == "name":
+		sys.stdout.write("{0}\n".format(TASK_NAME))
+	elif method == "create":
+		create_task(sys.argv[2], sys.argv[3])
+	elif method == "user":
+		check_answer(sys.argv[2], sys.argv[3], input())
+	else:
+		sys.stderr.write("Invalid method: {0}".format(method))
+		exit(ERR_UNKNOWN_METHOD)
