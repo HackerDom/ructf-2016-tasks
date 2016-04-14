@@ -36,8 +36,7 @@ def generate_video(team, dump_dir):
     # libavformat-extra-53 libavutil-extra-51 libpostproc-extra-52
     # libswscale-extra-2
 
-    subprocess.call(
-        "avconv -i 'image-%d.png' -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p" + dump_dir + "/static/video_" + team + ".mov")
+    subprocess.call("avconv -i '"+ dump_dir +"/image-%d.png' -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p" + dump_dir + "/static/video_" + team + ".mov")
     return "static/video_" + team + ".mov"
 
 def check_task(team, answer):
@@ -77,8 +76,7 @@ def main():
         print("Exiting with " + str(status))
         exit(stat)
     else:
-        print("No such action: '{}' available actions are: id, series, name, create, user".format(
-            action), file=sys.stderr)
+        print("No such action: '{}' available actions are: id, series, name, create, user".format(action), file=sys.stderr)
         exit(1)
 
 if __name__ == '__main__':
