@@ -60,7 +60,7 @@ def create_task(dump_dir, user_id):
 	sys.stdout.write(task);
 
 def check_answer(dump_dir, variant_idx, answer):
-	(_, _, jury_answer) = VARIANTS[int(variant_idx)].split()
+	(_, _, jury_answer) = VARIANTS[int(variant_idx)]
 
 	try:
 		answer = float(answer)
