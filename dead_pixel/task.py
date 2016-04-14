@@ -5,17 +5,20 @@ import hashlib
 import subprocess
 
 
-CATEGORY = 'stegano'
+CATEGORY = 'Dead Pixel'
 SCORE = 100
-NAME = "0xDEAD pixel"
+NAME = "Dead Pixel"
 
 
 
 
 def get_flag(team):
-    hash_object = hashlib.md5(team.encode('utf-8'))
+    team += 
+    hash_object = hashlib.md5((team + 'itstimeto').encode('utf-8'))
     return 'RUCTF' + hash_object.hexdigest()[:8]
-
+def get_filename(team):
+    hash_object = hashlib.md5((team + 'getschwifty').encode('utf-8'))
+    return hash_object.hexdigest()[3:14]
 
 def generate_video(team, dump_dir):
     string = '0' + str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
@@ -27,12 +30,12 @@ def generate_video(team, dump_dir):
         draw=ImageDraw.Draw(img)
         draw.point((13, 37),
                    (int(string[i])*255, int(string[i])*255, int(string[i])*255))
-        img.save(dump_dir+'/image-' + str(i) + '.png', 'PNG')
+        img.save(dump_dir+ '/' + team +'/image-' + str(i) + '.png', 'PNG')
 
     # Video generation: avconv -i "image-%d.png" -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p video.mov
 
-    subprocess.call("avconv -i '"+ dump_dir +"/image-%d.png' -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p" + dump_dir + "/static/video_" + team + ".mov")
-    return "static/video_" + team + ".mov"
+    subprocess.call("avconv -i '"+ dump_dir + '/' + team +"/image-%d.png' -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p" + dump_dir + "/static/video_" + team + ".mov")
+    return "static/video_" + get_filename(team) + ".mov"
 
 def check_task(team, answer):
     if answer == get_flag(team):
@@ -58,7 +61,7 @@ def main():
             print("Can't create task")
             exit(1)
         else:
-            print("ID:" + str(team_id+'pix'))
+            print("ID:" + team_id+'pix')
             HTML_EN = " I have some problems with my LCD, so I can't watch <a href='{}'>the cartoon</a>. Can you help me? ".format(quid)
             HTML_RU = " У меня какие-то проблемы с монитором, поэтому я не могу смотреть <a href='{}'>любимый мультик</a>. Поможешь? ".format(quid)
             print("html[en]:{}".format(HTML_EN))
@@ -67,7 +70,7 @@ def main():
         dump_dir=sys.argv[2]
         quid=sys.argv[3]
         answer=sys.stdin.readline().strip()
-        status=check_task(team, answer)
+        status=check_task(quid[:-3], answer)
         stat=0 if status else 1
         print("Exiting with " + str(status))
         exit(stat)
