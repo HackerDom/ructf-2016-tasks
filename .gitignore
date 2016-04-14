@@ -44,6 +44,7 @@ tmp/
 packages/
 shelf/
 .sass-cache/
+image.im.bz2
 
 node_modules
 *.ReSharper
