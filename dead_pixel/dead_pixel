@@ -35,7 +35,7 @@ def generate_video(team, dump_dir):
         draw.point((13, 37),
                    (int(string[i])*255, int(string[i])*255, int(string[i])*255))
         img.save(dump_dir + '/' + team + '/image-' + str(i) + '.png', 'PNG')
-
+    print('images generated for {}'.format(team), file=sys.stderr)
     # Video generation: avconv -i "image-%d.png" -r 25 -c:v libx264 -crf 20
     # -pix_fmt yuv420p video.mov
 
@@ -45,6 +45,7 @@ def generate_video(team, dump_dir):
     script = open(get_filename(team), 'w')
     script.write(cmd)
     subprocess.call(['bash', get_filename(team)])
+    print('video generated for {}'.format(team), file=sys.stderr)
     return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
 
