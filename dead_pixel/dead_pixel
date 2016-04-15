@@ -3,7 +3,8 @@ from PIL import Image, ImageDraw
 import sys
 import binascii
 import hashlib
-import subprocess
+import os
+# import subprocess
 
 
 CATEGORY = 'dead_pixel'
@@ -19,8 +20,11 @@ def get_filename(team):
     return hash_object.hexdigest()[3:14]
 
 def generate_video(team, dump_dir):
+    if not os.path.exists(dump_dir + "/" + team_id):
+            os.makedirs(dump_dir + "/" + team_id)
+    if not os.path.exists('static'):
+            os.makedirs('static')
     string = '0' + str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
-
     string = string.rjust(105, '0')
 
     for i in range(1, 105):
