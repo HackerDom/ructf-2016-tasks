@@ -23,7 +23,7 @@ def get_filename(team):
 
 
 def generate_video(team, dump_dir):
-    os.makedirs(dump_dir + "/" + team_id, exist_ok = True)
+    os.makedirs(dump_dir + "/" + team, exist_ok = True)
     os.makedirs('static', exist_ok = True)
     string = '0' + \
         str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
