@@ -12,7 +12,7 @@ TASK_NAME = "Substitution"
 TASK_HTML_EN_PATTERN = "You are given an encryption algorithm that " + \
 					   "takes a binary string of length <i>{msg_len}</i>, " + \
 					   "then calculates a number of ones modulo <i>{m}</i>" + \
-					   ", let's call it <i>n<\i>, concatenates " + \
+					   ", let's call it <i>n</i>, concatenates " + \
 					   "original message with <i>{check_len} - n</i> zeroes " + \
 					   "and <i>n</i> ones and then xors it with a key of " + \
 					   "lenth <i>{crypt_len}</i>, that is chosen randomly beforehead. " + \
@@ -21,7 +21,7 @@ TASK_HTML_EN_PATTERN = "You are given an encryption algorithm that " + \
 					   "cryptogram from the intercepted that can be successfully decrypted?"
 TASK_HTML_RU_PATTERN = "Вам дан алгоритм шифрования, который берет бинарную строку длины " + \
 					   "<i>{msg_len}</i>, вычисляет количество единиц по модулю <i>{m}</i>, " + \
-					   "обозначим это число как <i>n<\i>, затем конкатинирует исходное сообщение " + \
+					   "обозначим это число как <i>n</i>, затем конкатинирует исходное сообщение " + \
 					   " с <i>{check_len} - n</i> нулями и <i>n</i> единицами и складывает " + \
 					   "побитово с ключом длины <i>{crypt_len}</i>, выбраным случайно заранее. " + \
 					   "Какова вероятность успешной подмены этого шифра? Т.е. какова максимальная " + \
