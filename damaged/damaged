@@ -9,7 +9,7 @@ from taskutils import BaseTask, md5
 
 
 class Task(BaseTask.create(
-    NAME='damaged', CATEGORY='forensics', SCORE=100, DB_FILE='flags.db',
+    NAME='damaged', CATEGORY='forensics', SCORE=1, DB_FILE='flags.db',
     FLAGS_FILE='flags.txt', IMAGE_FILE=os.path.join(
         'static', 'a51f3fa3525b6a5c59ea272096a2eee3', 'image.im.bz2'),
     HTML_EN='Flag in the file "{}". Got it',

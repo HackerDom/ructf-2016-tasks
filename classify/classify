@@ -46,7 +46,7 @@ def classify(text):
 
 
 class Task(BaseTask.create(
-    NAME='classify', CATEGORY='ppc', SCORE=50, DB_FILE='flags.db',
+    NAME='classify', CATEGORY='ppc', SCORE=1, DB_FILE='flags.db',
     TASK_FILE=os.path.join(
         'static', 'ab83919b22c9a05b9ccb297efff3ecd5', 'task.tgz'),
     HTML_EN='Find vector for {} class',

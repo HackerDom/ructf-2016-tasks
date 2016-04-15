@@ -34,7 +34,7 @@ def create_task():
 
 
 class Task(BaseTask.create(
-    NAME='vigenere', CATEGORY='crypto', SCORE=100, DB_FILE='flags.db',
+    NAME='vigenere', CATEGORY='crypto', SCORE=1, DB_FILE='flags.db',
     HTML_EN="Decrypt the text: <pre>{}</pre>",
     HTML_RU="Расшифруйте текст: <pre>{}</pre>")):
 
