@@ -5,6 +5,7 @@ import binascii
 import hashlib
 import os
 import subprocess
+import shutil
 
 
 CATEGORY = 'dead_pixel'
@@ -25,6 +26,8 @@ def get_filename(team):
 def generate_video(team, dump_dir):
     os.makedirs(dump_dir + "/" + team, exist_ok = True)
     os.makedirs('static', exist_ok = True)
+    if os.path.isfile('{}/rick_and_morty_episode_{}.mov'.format(dump_dir, get_filename(team))):
+        return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
     string = '0' + \
         str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
     string = string.rjust(105, '0')
@@ -48,7 +51,7 @@ def generate_video(team, dump_dir):
     subprocess.call(['bash', dump_dir + '/' + get_filename(team)])
     print('video generated for {}'.format(team), file=sys.stderr)
     os.remove(dump_dir + '/' + get_filename(team))
-    os.rmdir(dump_dir + '/' + team)
+    shutil.rmtree(dump_dir + '/' + team)
     return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
 
