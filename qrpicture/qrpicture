@@ -65,8 +65,8 @@ class Task(BaseTask.create(
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id, *rest):
         (fn, quid) = Task.prepare_task(dump_dir, 'task.png', create_task)
-        Task.HTML_EN = Task.HTML_EN.format(fn)
-        Task.HTML_RU = Task.HTML_RU.format(fn)
+        Task.HTML_EN = Task.HTML_EN.format(os.path.join('static', fn))
+        Task.HTML_RU = Task.HTML_RU.format(os.path.join('static', fn))
         Task.print_task_info(quid, fn)
 
     @BaseTask.cmd("user")
