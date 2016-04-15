@@ -6,7 +6,7 @@ using System.Text;
 
 namespace winme
 {
-	class Program
+	public class Program
 	{
 		public static string playersId;
 		static void Main(string[] args)
