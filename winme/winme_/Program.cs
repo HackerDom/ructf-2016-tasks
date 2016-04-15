@@ -94,7 +94,7 @@ namespace winme
 			var md5 = MD5.Create();
 			var leftPart = md5.ComputeHash(strings);
 
-			var resultBytes = Xor(Xor(leftPart, rightPart), rightPart);
+			var resultBytes = Xor(leftPart, rightPart);
 			return resultBytes;
 		}
 
