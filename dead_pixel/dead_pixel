@@ -12,7 +12,6 @@ NAME = "dead_pixel"
 
 
 def get_flag(team):
-    team += 
     hash_object = hashlib.md5((team + 'itstimeto').encode('utf-8'))
     return 'RUCTF' + hash_object.hexdigest()[:8]
 def get_filename(team):
