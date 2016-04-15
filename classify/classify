@@ -35,6 +35,7 @@ def classify(text):
     try:
         subprocess.check_output(["svm-predict", fn1, "model", fn2])
     except Exception:
+        print("`svm-predict` not found", file=sys.stderr)
         return None
 
     try:
