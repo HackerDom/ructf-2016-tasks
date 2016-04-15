@@ -23,7 +23,7 @@ class Task(BaseTask.create(
         return flag.split(':')
 
     @BaseTask.cmd("create")
-    def cmd_create(self, dump_dir, team_id):
+    def cmd_create(self, dump_dir, team_id, *rest):
         (fn, flag) = Task.generate_flag()
         flag_ = ':'.join((fn, flag))
 
@@ -36,7 +36,7 @@ class Task(BaseTask.create(
         print("file:{}".format(Task.IMAGE_FILE))
 
     @BaseTask.cmd("user")
-    def cmd_user(self, dump_dir, quid):
+    def cmd_user(self, dump_dir, quid, *rest):
         answer = ':' + sys.stdin.readline().strip()
         entry = None
 

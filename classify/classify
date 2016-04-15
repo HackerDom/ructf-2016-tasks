@@ -53,7 +53,7 @@ class Task(BaseTask.create(
     HTML_RU='Найдите вектор для класса {}')):
 
     @BaseTask.cmd("create")
-    def cmd_create(self, dump_dir, team_id):
+    def cmd_create(self, dump_dir, team_id, *rest):
         klass = str(random.randint(1, 10))
 
         os.makedirs(dump_dir, exist_ok=True)
@@ -65,7 +65,7 @@ class Task(BaseTask.create(
         print("file:{}".format(Task.TASK_FILE))
 
     @BaseTask.cmd("user")
-    def cmd_user(self, dump_dir, quid):
+    def cmd_user(self, dump_dir, quid, *rest):
         answer = sys.stdin.readline().strip()
         flag = classify(answer)
         if flag is None:

@@ -27,15 +27,15 @@ class BaseTask(metaclass=abc.ABCMeta):
         cls = type(self)
 
         @BaseTask.cmd("id")
-        def cmd_id(self):
+        def cmd_id(self, *rest):
             print("{}:{}".format(cls.CATEGORY, cls.SCORE))
 
         @BaseTask.cmd("series")
-        def cmd_series(self):
+        def cmd_series(self, *rest):
             print(cls.CATEGORY)
 
         @BaseTask.cmd("name")
-        def cmd_name(self):
+        def cmd_name(self, *rest):
             print(cls.NAME)
 
         setattr(cls, 'cmd_id', cmd_id)

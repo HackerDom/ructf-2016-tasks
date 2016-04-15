@@ -63,12 +63,12 @@ class Task(BaseTask.create(
     HTML_RU='Найдите флаг')):
 
     @BaseTask.cmd("create")
-    def cmd_create(self, dump_dir, team_id):
+    def cmd_create(self, dump_dir, team_id, *rest):
         (fn, quid) = Task.prepare_task(dump_dir, 'task.png', create_task)
         Task.print_task_info(quid, fn)
 
     @BaseTask.cmd("user")
-    def cmd_user(self, dump_dir, quid):
+    def cmd_user(self, dump_dir, quid, *rest):
         code = Task.check_task(dump_dir, quid)
         return (0 if code else 1)
 
