@@ -17,7 +17,6 @@ TASK_HTML_RU_PATTERN = "Дорогой друг №%TEAM%, попробуй вы
 import hashlib
 import sys
 import datetime
-import md5
 
 def create_task(dump_dir, user_id):
 	task = \
