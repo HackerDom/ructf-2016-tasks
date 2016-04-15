@@ -70,7 +70,7 @@ class Task(BaseTask.create(
     @BaseTask.cmd("user")
     def cmd_user(self, dump_dir, quid, *rest):
         answer = sys.stdin.readline().strip()
-        flag = classify(answer)
+        flag = classify(Task.MODEL_FILE, answer)
         if flag is None:
             print('Wrong')
             return 1
