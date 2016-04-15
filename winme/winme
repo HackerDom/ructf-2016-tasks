@@ -1,4 +1,5 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
 ERR_OK = 0
 ERR_UNKNOWN_METHOD = 1
@@ -9,9 +10,9 @@ TASK_ID = "winme"
 TASK_SCORE = 1
 TASK_NAME = "Win me!"
 
-TASK_HTML_EN_PATTERN = "Try to win this <a href=/static/winme.exe>game</a> and you'll get the flag!"
+TASK_HTML_EN_PATTERN = "Try to win this <a href=\"/static/winme.exe\">game</a> and you'll get the flag!"
 
-TASK_HTML_RU_PATTERN = "Попробуйте выиграть в эту<a href=/static/winme.exe>игру</a> и получите флаг!"
+TASK_HTML_RU_PATTERN = "Попробуйте выиграть в эту<a href=\"/static/winme.exe\">игру</a> и получите флаг!"
 
 import hashlib
 import sys
