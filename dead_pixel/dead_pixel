@@ -9,7 +9,7 @@ import os
 
 CATEGORY = 'dead_pixel'
 SCORE = 1
-NAME = "dead_pixel"
+NAME = "Dead Pixel"
 
 
 def get_flag(team):
