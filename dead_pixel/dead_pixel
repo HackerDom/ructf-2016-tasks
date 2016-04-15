@@ -42,9 +42,10 @@ def generate_video(team, dump_dir):
     cmd = " ".join(['avconv', '-i', '"{}/{}/image-%d.png"'.format(dump_dir, team), '-r', '25', 
                     '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', 
                     '{}/rick_and_morty_episode_{}.mov'.format(dump_dir, get_filename(team))])
-    script = open(get_filename(team), 'w')
+    script = open(dump_dir + '/' + get_filename(team), 'w')
     script.write(cmd)
-    subprocess.call(['bash', get_filename(team)])
+    script.close()
+    subprocess.call(['bash', dump_dir + '/' + get_filename(team)])
     print('video generated for {}'.format(team), file=sys.stderr)
     return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
