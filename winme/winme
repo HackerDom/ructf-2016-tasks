@@ -27,8 +27,9 @@ def create_task(dump_dir, user_id):
 
 def check_answer(dump_dir, user_id, answer):
 	try:
-		jury_answer_bytes = "".join(user_id, "winme.exe", "Saturday").encode("utf-8")
-		jury_answer = md5.new(jury_answer).hexdigest()
+		params = [user_id, "winme.exe", "Saturday"]
+		jury_answer_bytes = "".join(params).encode("utf-8")
+		jury_answer = md5.new(jury_answer_bytes).hexdigest()
 		if jury_answer.lower() != answer.lower():
 			sys.stderr.write("Wrong answer, expected {0} got {1}\n".format(jury_answer, answer))
 			sys.exit(ERR_WRONG_ANSWER)
