@@ -17,6 +17,7 @@ TASK_HTML_RU_PATTERN = "Дорогой друг №%TEAM%, попробуй вы
 import hashlib
 import sys
 import datetime
+import md5
 
 def create_task(dump_dir, user_id):
 	task = \
@@ -51,7 +52,7 @@ if __name__ == "__main__":
 	elif method == "create":
 		create_task(sys.argv[2], sys.argv[3])
 	elif method == "user":
-		check_answer(sys.argv[2], sys.argv[3], input())
+		check_answer(sys.argv[2], sys.argv[3], sys.stdin.readline().strip())
 	else:
 		sys.stderr.write("Invalid method: {0}".format(method))
 		exit(ERR_UNKNOWN_METHOD)
