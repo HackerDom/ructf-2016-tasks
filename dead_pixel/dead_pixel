@@ -44,7 +44,7 @@ def generate_video(team, dump_dir):
                     '{}/static/rick_and_morty_episode_{}.mov'.format(dump_dir, get_filename(team))])
     script = open(get_filename(team), 'w')
     script.write(cmd)
-    subprocess.call('bash', get_filename(team))
+    subprocess.call(['bash', get_filename(team)])
     return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
 
