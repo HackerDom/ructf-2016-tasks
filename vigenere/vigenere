@@ -14,8 +14,8 @@ CIPHER_ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
 CIPHER_DICT = {c: i for (i, c) in enumerate(CIPHER_ABC)}
 
 
-def create_task():
-    with open('text.txt') as f:
+def create_task(fn):
+    with open(fn) as f:
         text = f.read().split()
 
     flag = FLAG_PREFIX + ''.join(random.choice(FLAG_ABC) for _ in range(16))
@@ -35,12 +35,14 @@ def create_task():
 
 class Task(BaseTask.create(
     NAME='Vigenere', CATEGORY='crypto', SCORE=1, DB_FILE='flags.db',
+    TEXT_FILE=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'text.txt'),
     HTML_EN="Decrypt the text: <pre>{}</pre>",
     HTML_RU="Расшифруйте текст: <pre>{}</pre>")):
 
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id, *rest):
-        (flag, text) = create_task()
+        (flag, text) = create_task(Task.TEXT_FILE)
         quid = Task.store_flag(os.path.join(dump_dir, Task.DB_FILE), flag)
         print("ID:{}".format(quid))
         print("html[en]:{}".format(Task.HTML_EN.format(text)))

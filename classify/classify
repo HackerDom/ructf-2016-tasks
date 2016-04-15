@@ -12,7 +12,7 @@ from taskutils import BaseTask
 
 ABC = '1234567890QWERTYUIOPASDFGHJKLZXCVBNM'
 
-def classify(text):
+def classify(model_fn, text):
     if not text.startswith('RUCTF'):
         return None
 
@@ -33,7 +33,7 @@ def classify(text):
         print(text, file=f)
 
     try:
-        subprocess.check_output(["svm-predict", fn1, "model", fn2])
+        subprocess.check_output(["svm-predict", fn1, model_fn, fn2])
     except Exception:
         print("`svm-predict` not found", file=sys.stderr)
         return None
@@ -48,6 +48,8 @@ def classify(text):
 
 class Task(BaseTask.create(
     NAME='Classify', CATEGORY='ML', SCORE=1, DB_FILE='flags.db',
+    MODEL_FILE=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'model'),
     TASK_FILE=os.path.join(
         'static', 'ab83919b22c9a05b9ccb297efff3ecd5', 'task.tgz'),
     HTML_EN='Find vector for {} class',
