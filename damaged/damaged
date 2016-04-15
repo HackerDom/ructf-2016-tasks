@@ -52,7 +52,8 @@ class Task(BaseTask.create(
             print('Wrong')
             return 1
 
-        return self.check_task(dump_dir, quid, entry)
+        code = self.check_task(dump_dir, quid, entry)
+        return (0 if code else 1)
 
 
 def main(args):
