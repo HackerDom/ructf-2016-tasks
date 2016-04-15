@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from PIL import Image, ImageDraw
 import sys
 import binascii
@@ -5,11 +6,9 @@ import hashlib
 import subprocess
 
 
-CATEGORY = 'Dead Pixel'
+CATEGORY = 'dead_pixel'
 SCORE = 100
-NAME = "Dead Pixel"
-
-
+NAME = "dead_pixel"
 
 
 def get_flag(team):
@@ -34,16 +33,8 @@ def generate_video(team, dump_dir):
 
     # Video generation: avconv -i "image-%d.png" -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p video.mov
 
-    subprocess.call("avconv -i '"+ dump_dir + '/' + team +"/image-%d.png' -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p" + dump_dir + "/static/video_" + team + ".mov")
-    return "static/video_" + get_filename(team) + ".mov"
-
-def check_task(team, answer):
-    if answer == get_flag(team):
-        print("Correct!")
-        return True
-    else:
-        print("Incorrect :(")
-        return False
+    subprocess.call('avconv -i "{}/{}/image-%d.png" -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p {}/static/rick_and_morty_episode_{}.mov'.format(dump_dir, team, dump_dir, get_filename(team)))
+    return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
 def main():
     action=sys.argv[1].lower()
@@ -70,9 +61,7 @@ def main():
         dump_dir=sys.argv[2]
         quid=sys.argv[3]
         answer=sys.stdin.readline().strip()
-        status=check_task(quid[:-3], answer)
-        stat=0 if status else 1
-        print("Exiting with " + str(status))
+        stat=0 if (answer == quid[:-3]) else 1
         exit(stat)
     else:
         print("No such action: '{}' available actions are: id, series, name, create, user".format(action), file=sys.stderr)
