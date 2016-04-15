@@ -71,7 +71,7 @@ def create_task(filename, parts):
 
 
 class Task(BaseTask.create(
-    NAME='splitting', CATEGORY='ppc', SCORE=1,
+    NAME='Splitted file', CATEGORY='unsplit', SCORE=1,
     HTML_EN="Find the flag", HTML_RU="Найдите флаг", DB_FILE='flags.db')):
     PARTS = 50
 

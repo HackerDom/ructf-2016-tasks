@@ -58,7 +58,7 @@ def create_task(filename):
 
 
 class Task(BaseTask.create(
-    NAME='qrcode', CATEGORY='ppc', SCORE=1, DB_FILE='flags.db',
+    NAME='QR Code', CATEGORY='qpic', SCORE=1, DB_FILE='flags.db',
     HTML_EN='Find the flag',
     HTML_RU='Найдите флаг')):
 
