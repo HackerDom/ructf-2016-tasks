@@ -9,28 +9,43 @@ from taskutils import BaseTask
 
 
 FLAG_PREFIX = 'RUCTF'
-FLAG_ABC = '1234567890_ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-CIPHER_ABC = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
-CIPHER_DICT = {c: i for (i, c) in enumerate(CIPHER_ABC)}
+FLAG_SUFFIX_LENGTH = 16
 
+KEY_MIN_LENGTH = 15
+KEY_MAX_LENGTH = 20
+
+ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+ALPHABET_INDEX = {c: i for (i, c) in enumerate(ALPHABET)}
+
+def encrypt(text, key):
+    cryptogram = ""
+    key_pos = 0
+    for ch in text:
+        if not ch in ALPHABET:
+            cryptogram += ch
+        else:
+            new_idx = (ALPHABET_INDEX[ch] + ALPHABET_INDEX[key[key_pos]]) % len(ALPHABET)
+            new_ch = ALPHABET[new_idx]
+            key_pos = (key_pos + 1) % len(key)
+
+            cryptogram += new_ch
+    return cryptogram
+
+def get_random_string(length):
+    return "".join( random.choice(ALPHABET) for _ in range(length) )
 
 def create_task(fn):
-    with open(fn) as f:
+    with open(fn, "rt", encoding="utf-8") as f:
         text = f.read().split()
 
-    flag = FLAG_PREFIX + ''.join(random.choice(FLAG_ABC) for _ in range(16))
+    flag = FLAG_PREFIX + get_random_string(FLAG_SUFFIX_LENGTH)
+    print(flag)
     text.insert(random.randrange(len(text)), flag)
     text = ' '.join(text)
 
-    key = [CIPHER_DICT[random.choice(CIPHER_ABC)]
-           for _ in range(len(FLAG_PREFIX) + 5)]
+    key = get_random_string(random.randrange(KEY_MIN_LENGTH, KEY_MAX_LENGTH + 1))
 
-    text = ''.join((
-        CIPHER_ABC[(CIPHER_DICT[t] + k)%len(CIPHER_ABC)]
-        if t in CIPHER_DICT else t)
-        for (t, k) in zip(text, itertools.cycle(key)))
-
-    return (flag, text)
+    return (flag, encrypt(text, key))
 
 
 class Task(BaseTask.create(
