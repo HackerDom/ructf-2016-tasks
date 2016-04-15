@@ -10,7 +10,9 @@ from taskutils import BaseTask, md5
 
 class Task(BaseTask.create(
     NAME='Damaged Disk', CATEGORY='ddisk', SCORE=1, DB_FILE='flags.db',
-    FLAGS_FILE='flags.txt', IMAGE_FILE=os.path.join(
+    FLAGS_FILE=os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), 'flags.txt'),
+    IMAGE_FILE=os.path.join(
         'static', 'a51f3fa3525b6a5c59ea272096a2eee3', 'image.im.bz2'),
     HTML_EN='Flag in the file "{}". Got it <a href="{}">here</a>',
     HTML_RU='Флаг в файле "{}". Получите его <a href="{}">здесь</a>')):
