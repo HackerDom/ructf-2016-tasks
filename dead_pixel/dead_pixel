@@ -4,7 +4,7 @@ import sys
 import binascii
 import hashlib
 import os
-# import subprocess
+import subprocess
 
 
 CATEGORY = 'dead_pixel'
