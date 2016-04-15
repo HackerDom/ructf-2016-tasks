@@ -10,9 +10,9 @@ TASK_ID = "winme"
 TASK_SCORE = 1
 TASK_NAME = "Win me!"
 
-TASK_HTML_EN_PATTERN = "Try to win this <a href=\"static/winme.exe\">game</a> and you'll get the flag!"
+TASK_HTML_EN_PATTERN = "Dear user #%TEAM%, try to win this <a href=\"static/winme.exe\">game</a> and you'll get the flag!"
 
-TASK_HTML_RU_PATTERN = "Попробуйте выиграть в эту <a href=\"static/winme.exe\">игру</a> и получите флаг!"
+TASK_HTML_RU_PATTERN = "Дорогой друг №%TEAM%, попробуй выиграть в эту <a href=\"static/winme.exe\">игру</a> и получить флаг!"
 
 import hashlib
 import sys
