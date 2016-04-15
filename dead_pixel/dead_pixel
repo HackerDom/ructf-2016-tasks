@@ -9,38 +9,44 @@ import os
 
 CATEGORY = 'dead_pixel'
 SCORE = 1
-NAME = "dead_pixel"
+NAME = "Dead Pixel"
 
 
 def get_flag(team):
     hash_object = hashlib.md5((team + 'itstimeto').encode('utf-8'))
     return 'RUCTF' + hash_object.hexdigest()[:8]
+
+
 def get_filename(team):
     hash_object = hashlib.md5((team + 'getschwifty').encode('utf-8'))
     return hash_object.hexdigest()[3:14]
 
+
 def generate_video(team, dump_dir):
-    if not os.path.exists(dump_dir + "/" + team_id):
-            os.makedirs(dump_dir + "/" + team_id)
-    if not os.path.exists('static'):
-            os.makedirs('static')
-    string = '0' + str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
+    os.makedirs(dump_dir + "/" + team_id, exist_ok = True)
+    os.makedirs('static', exist_ok = True)
+    string = '0' + \
+        str(bin(int(binascii.hexlify(bytes(get_flag(team), 'utf-8')), 16))[2:])
     string = string.rjust(105, '0')
 
     for i in range(1, 105):
-        img=Image.open('original/image-' + str(i) + '.png')
-        draw=ImageDraw.Draw(img)
+        img = Image.open('original/image-' + str(i) + '.png')
+        draw = ImageDraw.Draw(img)
         draw.point((13, 37),
                    (int(string[i])*255, int(string[i])*255, int(string[i])*255))
-        img.save(dump_dir+ '/' + team +'/image-' + str(i) + '.png', 'PNG')
+        img.save(dump_dir + '/' + team + '/image-' + str(i) + '.png', 'PNG')
 
-    # Video generation: avconv -i "image-%d.png" -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p video.mov
+    # Video generation: avconv -i "image-%d.png" -r 25 -c:v libx264 -crf 20
+    # -pix_fmt yuv420p video.mov
 
-    subprocess.call('avconv -i "{}/{}/image-%d.png" -r 25 -c:v libx264 -crf 20 -pix_fmt yuv420p {}/static/rick_and_morty_episode_{}.mov'.format(dump_dir, team, dump_dir, get_filename(team)))
+    subprocess.call(['avconv', '-i', '"{}/{}/image-%d.png"'.format(dump_dir, team), '-r', '25', 
+                    '-c:v', 'libx264', '-crf', '20', '-pix_fmt', 'yuv420p', 
+                    '{}/static/rick_and_morty_episode_{}.mov'.format(dump_dir, get_filename(team))])
     return "static/rick_and_morty_episode_" + get_filename(team) + ".mov"
 
+
 def main():
-    action=sys.argv[1].lower()
+    action = sys.argv[1].lower()
     if action == 'id':
         print("{}:{}".format(CATEGORY, SCORE))
     elif action == 'series':
@@ -48,26 +54,29 @@ def main():
     elif action == 'name':
         print(NAME)
     elif action == 'create':
-        dump_dir=sys.argv[2]
-        team_id=sys.argv[3]
-        quid=generate_video(team_id, dump_dir)
+        dump_dir = sys.argv[2]
+        team_id = sys.argv[3]
+        quid = generate_video(team_id, dump_dir)
         if quid is None:
             print("Can't create task")
             exit(1)
         else:
             print("ID:" + team_id+'pix')
-            HTML_EN = " I have some problems with my LCD, so I can't watch <a href='{}'>the cartoon</a>. Can you help me? ".format(quid)
-            HTML_RU = " У меня какие-то проблемы с монитором, поэтому я не могу смотреть <a href='{}'>любимый мультик</a>. Поможешь? ".format(quid)
+            HTML_EN = " I have some problems with my LCD, so I can't watch <a href='{}'>the cartoon</a>. Can you help me? ".format(
+                quid)
+            HTML_RU = " У меня какие-то проблемы с монитором, поэтому я не могу смотреть <a href='{}'>любимый мультик</a>. Поможешь? ".format(
+                quid)
             print("html[en]:{}".format(HTML_EN))
             print("html[ru]:{}".format(HTML_RU))
     elif action == 'user':
-        dump_dir=sys.argv[2]
-        quid=sys.argv[3]
-        answer=sys.stdin.readline().strip()
-        stat=0 if (answer == quid[:-3]) else 1
+        dump_dir = sys.argv[2]
+        quid = sys.argv[3]
+        answer = sys.stdin.readline().strip()
+        stat = 0 if (answer == quid[:-3]) else 1
         exit(stat)
     else:
-        print("No such action: '{}' available actions are: id, series, name, create, user".format(action), file=sys.stderr)
+        print("No such action: '{}' available actions are: id, series, name, create, user".format(
+            action), file=sys.stderr)
         exit(1)
 
 if __name__ == '__main__':

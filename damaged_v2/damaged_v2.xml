@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<quest proto="xmlquest-2.0">
+<quest series="ddisk v2" id="ddisk v2:1" proto="xmlquest-2.0">
     <name>Damaged file</name>
     <task type="html" lang="en">Let's see if you could recover <a href="static/task.png">it</a>!</task>
     <task type="html" lang="ru">Интересно, удастся ли вам восстановить<a href="static/task.png">файл</a>?</task>
