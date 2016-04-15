@@ -8,7 +8,7 @@ import os
 
 
 CATEGORY = 'dead_pixel'
-SCORE = 100
+SCORE = 1
 NAME = "dead_pixel"
 
 
