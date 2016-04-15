@@ -12,8 +12,8 @@ class Task(BaseTask.create(
     NAME='Damaged Disk', CATEGORY='ddisk', SCORE=1, DB_FILE='flags.db',
     FLAGS_FILE='flags.txt', IMAGE_FILE=os.path.join(
         'static', 'a51f3fa3525b6a5c59ea272096a2eee3', 'image.im.bz2'),
-    HTML_EN='Flag in the file "{}". Got it',
-    HTML_RU='Флаг в файле "{}". Получите его')):
+    HTML_EN='Flag in the file "{}". Got it <a href="{}">here</a>',
+    HTML_RU='Флаг в файле "{}". Получите его <a href="{}">здесь</a>')):
 
     @classmethod
     def generate_flag(cls):
@@ -31,8 +31,8 @@ class Task(BaseTask.create(
         quid = self.store_flag(os.path.join(dump_dir, Task.DB_FILE), flag_)
 
         print("ID:{}".format(quid))
-        print("html[en]:{}".format(Task.HTML_EN.format(fn)))
-        print("html[ru]:{}".format(Task.HTML_RU.format(fn)))
+        print("html[en]:{}".format(Task.HTML_EN.format(fn, Task.IMAGE_FILE)))
+        print("html[ru]:{}".format(Task.HTML_RU.format(fn, Task.IMAGE_FILE)))
         print("file:{}".format(Task.IMAGE_FILE))
 
     @BaseTask.cmd("user")

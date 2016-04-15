@@ -59,12 +59,14 @@ def create_task(filename):
 
 class Task(BaseTask.create(
     NAME='QR Code', CATEGORY='qpic', SCORE=1, DB_FILE='flags.db',
-    HTML_EN='Find the flag',
-    HTML_RU='Найдите флаг')):
+    HTML_EN='Find the flag <a href="{}">here</a>',
+    HTML_RU='Найдите флаг <a href="{}">здесь</a>')):
 
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id, *rest):
         (fn, quid) = Task.prepare_task(dump_dir, 'task.png', create_task)
+        Task.HTML_EN = Task.HTML_EN.format(fn)
+        Task.HTML_RU = Task.HTML_RU.format(fn)
         Task.print_task_info(quid, fn)
 
     @BaseTask.cmd("user")

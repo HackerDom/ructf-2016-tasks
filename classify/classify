@@ -52,8 +52,8 @@ class Task(BaseTask.create(
         os.path.dirname(os.path.abspath(__file__)), 'model'),
     TASK_FILE=os.path.join(
         'static', 'ab83919b22c9a05b9ccb297efff3ecd5', 'task.tgz'),
-    HTML_EN='Find vector for {} class',
-    HTML_RU='Найдите вектор для класса {}')):
+    HTML_EN='Find vector for {} class. <a href="{}">file</a>',
+    HTML_RU='Найдите вектор для класса {}. <a href="{}">file</a>')):
 
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id, *rest):
@@ -63,8 +63,8 @@ class Task(BaseTask.create(
         quid = self.store_flag(os.path.join(dump_dir, Task.DB_FILE), klass)
 
         print("ID:{}".format(quid))
-        print("html[en]:{}".format(Task.HTML_EN.format(klass)))
-        print("html[ru]:{}".format(Task.HTML_RU.format(klass)))
+        print("html[en]:{}".format(Task.HTML_EN.format(klass, Task.TASK_FILE)))
+        print("html[ru]:{}".format(Task.HTML_RU.format(klass, Task.TASK_FILE)))
         print("file:{}".format(Task.TASK_FILE))
 
     @BaseTask.cmd("user")
