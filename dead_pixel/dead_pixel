@@ -82,7 +82,7 @@ def main():
         dump_dir = sys.argv[2]
         quid = sys.argv[3]
         answer = sys.stdin.readline().strip()
-        stat = 0 if (answer.lower() == get_flag(quid[:-3].lower())) else 1
+        stat = 0 if (answer.lower() == get_flag(quid[:-3]).lower()) else 1
         exit(stat)
     else:
         print("No such action: '{}' available actions are: id, series, name, create, user".format(
