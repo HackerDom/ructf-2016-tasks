@@ -71,9 +71,9 @@ def create_task(filename, parts):
 
 
 class Task(BaseTask.create(
-    NAME='Splitted file', CATEGORY='unsplit', SCORE=1,
-    HTML_EN='Find the flag <a href="{}">here</a>',
-    HTML_RU='Найдите флаг <a href="{}">здесь</a>', DB_FILE='flags.db')):
+    NAME='Bigger picture', CATEGORY='bigpic', SCORE=1,
+    HTML_EN='We have <a href="{}">a bunch of files</a>б but can\'t make any sense out of them. I think we\'re missing the bigger pucture',
+    HTML_RU='У нас есть <a href="{}">куча файлов</a>, но мы ничего не понимаем. Мне кажется, мы упускаем что-то важное.', DB_FILE='flags.db')):
     PARTS = 50
 
     @BaseTask.cmd("create")

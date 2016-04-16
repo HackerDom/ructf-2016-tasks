@@ -8,7 +8,7 @@ import subprocess
 import shutil
 
 
-CATEGORY = 'dead_pixel'
+CATEGORY = 'deadpixel'
 SCORE = 1
 NAME = "Dead Pixel"
 
@@ -72,7 +72,7 @@ def main():
             exit(1)
         else:
             print("ID:" + team_id+'pix')
-            HTML_EN = " I have some problems with my LCD, so I can't watch <a href='{}'>the cartoon</a>. Can you help me? ".format(
+            HTML_EN = " I have some problems with my LCD, so I can't watch <a href='{}'>my favorite cartoon</a>. Can you help me? ".format(
                 quid)
             HTML_RU = " У меня какие-то проблемы с монитором, поэтому я не могу смотреть <a href='{}'>любимый мультик</a>. Поможешь? ".format(
                 quid)

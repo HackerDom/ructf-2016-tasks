@@ -14,8 +14,8 @@ class Task(BaseTask.create(
         os.path.dirname(os.path.abspath(__file__)), 'flags.txt'),
     IMAGE_FILE=os.path.join(
         'static', 'a51f3fa3525b6a5c59ea272096a2eee3', 'image.im.bz2'),
-    HTML_EN='Flag in the file "{}". Got it <a href="{}">here</a>',
-    HTML_RU='Флаг в файле "{}". Получите его <a href="{}">здесь</a>')):
+    HTML_EN='We won\'t hide it from you, the flag in the file "{}" on <a href="{}">that disk</a>.',
+    HTML_RU='Мы не будем скрывать, флаг в файле "{}" на <a href="{}">этом диске</a>.')):
 
     @classmethod
     def generate_flag(cls):

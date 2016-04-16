@@ -47,13 +47,13 @@ def classify(model_fn, text):
 
 
 class Task(BaseTask.create(
-    NAME='Classify', CATEGORY='ML', SCORE=1, DB_FILE='flags.db',
+    NAME='Classy', CATEGORY='classy', SCORE=1, DB_FILE='flags.db',
     MODEL_FILE=os.path.join(
         os.path.dirname(os.path.abspath(__file__)), 'model'),
     TASK_FILE=os.path.join(
         'static', 'ab83919b22c9a05b9ccb297efff3ecd5', 'task.tgz'),
-    HTML_EN='Find vector for {} class. <a href="{}">file</a>',
-    HTML_RU='Найдите вектор для класса {}. <a href="{}">file</a>')):
+    HTML_EN='We need a class {} flag from that <a href="{}">thing</a>.',
+    HTML_RU='Нам нужен флаг {} класса из этой <a href="{}">штуковины</a>.')):
 
     @BaseTask.cmd("create")
     def cmd_create(self, dump_dir, team_id, *rest):
